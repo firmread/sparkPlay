@@ -1,18 +1,20 @@
-  //SERIAL-SIGNAL-STRENGTH
+//WLAN-RSSI
 
-  #include "application.h"
-  #include "spark_disable_cloud.h"
-  //https://community.spark.io/t/bug-bounty-kill-the-cyan-flash-of-death/1322/201
+#include "application.h"
+#include "spark_disable_cloud.h"
+
+//https://community.spark.io/t/bug-bounty-kill-the-cyan-flash-of-death/1322/201
+// reference for wlan libs https://github.com/spark/core-common-lib/blob/master/CC3000_Host_Driver/wlan.h
+
+int y = 1;
+int incomingByte = 0;
+unsigned char ucResults[64];
+UINT32* aiIntervalList[16];
 
 
-  int y = 1;
-  int incomingByte = 0;
-  unsigned char ucResults[64];
+tNetappIpconfigRetArgs ipconfig;
 
-
-  tNetappIpconfigRetArgs ipconfig;
-
-  void setup() {
+void setup() {
 
     pinMode(D7,OUTPUT);
     pinMode(D0,OUTPUT);
@@ -35,9 +37,10 @@
     // Serial.println(Network.gatewayIP());
     // Serial.println(Network.SSID());
     Serial.println("press 'a' to read Network data\n");
-  }
 
-  void loop() {
+}
+
+void loop() {
 
     netapp_ipconfig(&ipconfig);
     char connectedSSID[32];
@@ -46,18 +49,19 @@
 
 
     digitalWrite(D7,HIGH);
-    delay(500);
+    delay(50);
     digitalWrite(D7,LOW);
-    delay(500);
+    delay(50);
 
-    long err = wlan_ioctl_get_scan_results(0, ucResults);
+    long errParams = wlan_ioctl_set_scan_params(1000,20,30,2,0x7ff,-80,0,205,aiIntervalList[16]);
+    long errResults = wlan_ioctl_get_scan_results(0, ucResults);
     int _numEntry = ((uint8_t) ucResults[3] << 24) | ((uint8_t) ucResults[2] << 16) | ((uint8_t) ucResults[1] << 8) | ((uint8_t) ucResults[0]);
 
-    if (err == 0 && _numEntry > 0) {
+    if (errParams == 0 && errResults == 0 && _numEntry > 0) {
 
 
         digitalWrite(D4,HIGH);
-        delay(100);
+        delay(50);
         digitalWrite(D4,LOW);
 
     	int _stat = ((uint8_t) ucResults[7] << 24) | ((uint8_t) ucResults[6] << 16) | ((uint8_t) ucResults[5] << 8) | ((uint8_t) ucResults[4]);
@@ -122,25 +126,25 @@
 
         }
 
+        else {
+            Serial.print(connectedSSID);
+            Serial.print(" >______< ");
+            Serial.println(ssid);
+        }
+
         incomingByte = Serial.read();
         //key press 'a' to get data
         if (incomingByte == 97){
-            Serial.print("local ip   : ");
             Serial.println(Network.localIP());
-            Serial.print("subnet mask: ");
             Serial.println(Network.subnetMask());
-            Serial.print("gateway ip : ");
             Serial.println(Network.gatewayIP());
-            Serial.print("ssid       : ");
             Serial.println(Network.SSID());
-            Serial.println();
         }
-
-        Serial.print(connectedSSID);
-        Serial.print( " ");
-        Serial.println(ssid);
 
 
     }
+    else{
+        Serial.println("oops,,,");
+    }
 
-  }
+}
