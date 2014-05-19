@@ -1,0 +1,36 @@
+#######################################
+# Syntax Coloring Map for GLO216
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+GLO216	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+homeCursor	KEYWORD2
+selectSize	KEYWORD2
+defaultSize	KEYWORD2
+backspace	KEYWORD2
+tab	KEYWORD2
+linefeed	KEYWORD2
+verticalTab	KEYWORD2
+clearScreen	KEYWORD2
+carriageReturn	KEYWORD2
+turnOn	KEYWORD2
+turnOff	KEYWORD2
+setPosition	KEYWORD2
+rightAlign	KEYWORD2
+sevenSeg	KEYWORD2
+textStyle	KEYWORD2
+escape	KEYWORD2
+bpkInstr	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
