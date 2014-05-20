@@ -30,8 +30,9 @@ void setup() {
     digitalWrite(ledPin2,LOW);
     digitalWrite(ledPin3,LOW);
 
-    Serial.begin(115200);
+    Serial.begin(9600);
     // while(!Serial.available());
+    Serial1.begin(9600);
 
     Serial.println(Network.localIP());
     Serial.println(Network.subnetMask());
@@ -99,13 +100,17 @@ void loop() {
     	Serial.print(_numEntry);
     	Serial.print(" nets found. ");
     	Serial.print(ssid);
+        Serial1.println(ssid);
 
-        if (_valid)
+        if (_valid){
     		Serial.print(" is valid, RSSI: ");
+        }
     	else
     		Serial.print("not valid, RSSI: ");
 
         Serial.print(_rssi);
+        Serial1.println(_rssi);
+
     	Serial.print(", mode: ");
     	switch (_mode) {
     		case 0:
@@ -146,3 +151,12 @@ void loop() {
     }
 
 }
+
+
+
+
+
+
+
+
+
